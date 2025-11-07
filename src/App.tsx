@@ -4,6 +4,7 @@ import Index from './pages/Index'
 import SignIn from './pages/SignIn'
 import SignUp from './pages/SignUp'
 import Counter from './pages/Counter'
+import TodoList from './pages/TodoList'
 
 function AuthLayout(){
   return(
@@ -20,6 +21,7 @@ function App() {
     <Routes>
       <Route path='/' element={<Index />} />
       <Route path='/counter' element={<Counter />} />
+      <Route path='/todo' element={<TodoList />} />
       <Route element={<AuthLayout />}>
         <Route path='/sign-in' element={<SignIn />} />
         <Route path='/sign-up' element={<SignUp />} />

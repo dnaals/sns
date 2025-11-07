@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { combine } from 'zustand/middleware';
+import { combine, subscribeWithSelector, persist, createJSONStorage, devtools } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
 
 // type Store = {
@@ -11,22 +11,48 @@ import { immer } from 'zustand/middleware/immer';
 // }
 
 export const countStore = create(
-    immer(
-        combine({ count: 0 }, (set, get) => ({
-            actions: {
-                increase: () => {
-                    set((state)=>{
-                        state.count+=1;
-                    })
-                },
-                decrease: () => {
-                    set((state)=>{
-                        state.count-=1;
-                    })
-                },
+    devtools(
+        persist(
+            subscribeWithSelector(
+                immer(
+                    combine({ count: 0 }, (set, get) => ({
+                        actions: {
+                            increase: () => {
+                                set((state) => {
+                                    state.count += 1;
+                                })
+                            },
+                            decrease: () => {
+                                set((state) => {
+                                    state.count -= 1;
+                                })
+                            },
+                        }
+                    }))
+                )
+            ),
+            {
+                name: 'countStore',
+                partialize: (store) => ({
+                    count: store.count
+                }),
+                storage: createJSONStorage(() => sessionStorage),
+
             }
-        }))
-    ))
+        ),
+        {
+            name : "countStore",
+        }
+    )
+
+
+)
+
+countStore.subscribe((store) => store.count, (count, prevCount) => {
+    console.log(count, prevCount);
+    const store = countStore.getState();
+    countStore.setState((store) => ({}))
+})
 
 // export const countStore = create<Store>((set, get) => (
 //     {
