@@ -1,0 +1,18 @@
+import { useTodoDataById } from '@/hooks/queries/use-todo-data-by-id';
+import { useParams } from 'react-router';
+
+function TodoDetail({}) {
+    const params = useParams();
+    const id = params.id;
+    const {data,isLoading,error} = useTodoDataById(String(id));
+    if(isLoading) return <div>로딩중</div>
+    if(error||!data) return <div>에러</div>
+
+    return (
+        <div>
+            {data.contents}
+        </div>
+    );
+}
+
+export default TodoDetail;
