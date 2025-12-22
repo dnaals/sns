@@ -26,7 +26,6 @@ export type Database = {
         Insert: {
           author_id?: string
           contents: string
-          created_at?: string
           id?: number
           image_urls?: string[] | null
           like_count?: number
